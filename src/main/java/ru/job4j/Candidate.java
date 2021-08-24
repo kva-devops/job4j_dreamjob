@@ -1,9 +1,9 @@
 package ru.job4j;
 
 public class Candidate {
-    int id;
-    String name;
-    Resume resume;
+    private int id;
+    private String name;
+    private Resume resume;
 
     public Candidate(int id, String name) {
         this.id = id;

@@ -1,7 +1,7 @@
 package ru.job4j;
 
 public class Vacancy {
-    String title;
-    String description;
-    int salary;
+    private String title;
+    private String description;
+    private int salary;
 }

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HROfficer {
-    int id;
-    String name;
-    String companyName;
-    String phoneNumber;
-    List<Vacancy> vacancyList = new ArrayList<>();
+    private int id;
+    private String name;
+    private String companyName;
+    private String phoneNumber;
+    private List<Vacancy> vacancyList = new ArrayList<>();
 
     public HROfficer(int id, String name, String companyName, String phoneNumber) {
         this.id = id;
