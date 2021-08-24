@@ -1,3 +1,6 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="ru.job4j.dream.store.Store" %>
+<%@ page import="ru.job4j.dream.model.Post" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -15,9 +18,28 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <title>Hello, world!</title>
+    <title>Работа мечты</title>
 </head>
 <body>
-<h1>Hello, world!</h1>
+<div class="container">
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Объявления</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for (Post post : Store.instOf().findAll()) { %>
+            <tr>
+                <td><%= post.getName() %></td>
+                <td><%= post.getDescription() %></td>
+                <td><%= post.getCreated() %></td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>
