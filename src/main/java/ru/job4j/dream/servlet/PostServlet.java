@@ -10,6 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class PostServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse resp) throws IOException, ServletException {
+        req.setAttribute("posts", Store.instOf().findAllPosts());
+        req.getRequestDispatcher("posts.jsp").forward(req, resp);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req,
                           HttpServletResponse resp) throws IOException, ServletException {
@@ -17,6 +25,6 @@ public class PostServlet extends HttpServlet {
         Store.instOf().save(new Post(
                 Integer.valueOf(req.getParameter("id")),
                 req.getParameter("name")));
-        resp.sendRedirect(req.getContextPath() + "/posts.jsp");
+        resp.sendRedirect(req.getContextPath() + "/posts.do");
     }
 }
