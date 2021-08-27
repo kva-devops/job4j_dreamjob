@@ -8,6 +8,9 @@ import ru.job4j.dream.model.Post;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,7 +61,7 @@ public class PsqlStore implements Store {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM post ORDER BY id")) {
             try (ResultSet it = ps.executeQuery()) {
-                if (it.next()) {
+                while (it.next()) {
                     posts.add(new Post(it.getInt("id"), it.getString("name")));
                 }
             }
@@ -165,7 +168,7 @@ public class PsqlStore implements Store {
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM post WHERE id=?")) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
+                if (it.next()) {
                     post = new Post(it.getInt("id"), it.getString("name"));
                 }
             }
@@ -182,7 +185,7 @@ public class PsqlStore implements Store {
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE id=?")) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
+                if (it.next()) {
                     candidate = new Candidate(it.getInt("id"), it.getString("name"));
                 }
             }
@@ -190,5 +193,33 @@ public class PsqlStore implements Store {
             LOG.error("Exception in CANDIDATE FIND BY ID method", e);
         }
         return candidate;
+    }
+
+    @Override
+    public void deletePost(int id) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("DELETE FROM post WHERE id=?")) {
+            ps.setInt(1, id);
+            ps.execute();
+        } catch (Exception e) {
+            LOG.error("Exception in DELETE POST method.", e);
+        }
+    }
+
+    @Override
+    public void deleteCandidate(int id) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("DELETE FROM candidate WHERE id=?")) {
+            ps.setInt(1, id);
+            ps.execute();
+        } catch (Exception e) {
+            LOG.error("Exception in DELETE CANDIDATE method.", e);
+        }
+        String path = "../images/" + id;
+        try {
+            Files.deleteIfExists(Paths.get(path));
+        } catch (IOException e) {
+            LOG.error("Exception IO in DELETE CANDIDATE method.", e);
+        }
     }
 }
