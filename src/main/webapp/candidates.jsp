@@ -52,6 +52,15 @@
                                 </a>
                                 <c:out value="${candidate.name}"/>
                             </td>
+                            <td>
+                                <img src="<c:url value='/downloadPhoto?name=${candidate.id}'/>" width="100px" height="100px"/>
+                            </td>
+                            <td>
+                                <a href="<c:url value='/photoUpload.jsp?name=${candidate.id}'/>">Добавить</a>
+                            </td>
+                            <td>
+                                <a href="<c:url value='/deleteCandidate?name=${candidate.id}'/>">Удалить</a>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>

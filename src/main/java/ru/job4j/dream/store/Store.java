@@ -3,6 +3,9 @@ package ru.job4j.dream.store;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.*;
 import java.util.Collection;
 import java.util.Map;
@@ -73,4 +76,13 @@ public class Store {
         return candidates.get(id);
     }
 
+    public void delCandidate(int id) {
+        candidates.remove(id);
+        String path = "../images/" + id;
+        try {
+            Files.deleteIfExists(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
