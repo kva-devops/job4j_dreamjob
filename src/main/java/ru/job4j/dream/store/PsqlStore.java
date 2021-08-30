@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -88,6 +89,22 @@ public class PsqlStore implements Store {
     }
 
     @Override
+    public Collection<User> findAllUsers() {
+        List<User> users = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM users ORDER BY id")) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    users.add(new User(it.getInt("id"), it.getString("name"), it.getString("email"), it.getString("password")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception in FIND ALL USERS method", e);
+        }
+        return users;
+    }
+
+    @Override
     public void save(Post post) {
         if (post.getId() == 0) {
             create(post);
@@ -102,6 +119,47 @@ public class PsqlStore implements Store {
             create(candidate);
         } else {
             update(candidate);
+        }
+    }
+
+    @Override
+    public void saveUser(User user) {
+        if (user.getId() == 0) {
+            create(user);
+        } else {
+            update(user);
+        }
+    }
+
+    private User create(User user) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO users(name) VALUES (?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    user.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception in USER CREATE method", e);
+        }
+        return user;
+    }
+
+    private void update(User user) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("UPDATE users SET name=?, email=?, password=? WHERE id=?")) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setInt(4, user.getId());
+            ps.execute();
+        } catch (Exception e) {
+            LOG.error("Exception in USER UPDATE method", e);
         }
     }
 
@@ -196,6 +254,23 @@ public class PsqlStore implements Store {
     }
 
     @Override
+    public User findByIdUser(int id) {
+        User user = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM users WHERE id=?")) {
+            ps.setInt(1, id);
+            try (ResultSet it = ps.executeQuery()) {
+                if (it.next()) {
+                    user = new User(it.getInt("id"), it.getString("name"), it.getString("email"), it.getString("password"));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception in USER FIND BY ID method", e);
+        }
+        return user;
+    }
+
+    @Override
     public void deletePost(int id) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("DELETE FROM post WHERE id=?")) {
@@ -220,6 +295,17 @@ public class PsqlStore implements Store {
             Files.deleteIfExists(Paths.get(path));
         } catch (IOException e) {
             LOG.error("Exception IO in DELETE CANDIDATE method.", e);
+        }
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("DELETE FROM users WHERE id=?")) {
+            ps.setInt(1, id);
+            ps.execute();
+        } catch (Exception e) {
+            LOG.error("Exception in DELETE USER method", e);
         }
     }
 }
