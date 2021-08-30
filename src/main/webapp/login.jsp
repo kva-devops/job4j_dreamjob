@@ -56,7 +56,7 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Авторизация
+                Авторизация | <a class="card-header-link" href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>
             </div>
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/auth.do" method="post">

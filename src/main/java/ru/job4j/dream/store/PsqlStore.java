@@ -133,7 +133,7 @@ public class PsqlStore implements Store {
 
     private User create(User user) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO users(name) VALUES (?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO users(name, email, password) VALUES (?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
@@ -307,5 +307,22 @@ public class PsqlStore implements Store {
         } catch (Exception e) {
             LOG.error("Exception in DELETE USER method", e);
         }
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        User user = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM users WHERE email=?")) {
+            ps.setString(1, email);
+            try (ResultSet it = ps.executeQuery()) {
+                if (it.next()) {
+                    user = new User(it.getInt("id"), it.getString("name"), it.getString("email"), it.getString("password"));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception in USER FIND BY EMAIL method", e);
+        }
+        return user;
     }
 }

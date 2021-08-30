@@ -30,4 +30,6 @@ public interface Store {
     void deleteCandidate(int id);
 
     void deleteUser(int id);
+
+    User findByEmail(String email);
 }
