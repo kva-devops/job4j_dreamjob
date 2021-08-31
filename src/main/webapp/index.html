@@ -10,12 +10,25 @@
     <script>
         function validate() {
             var elements = document.forms[0].elements;
-
             for (var i = 0; i < elements.length - 1; i++) {
                 if ($(elements[i]).val() == '') {
                     alert($(elements[i]).attr('title'));
                 }
             }
+        }
+        function addRow() {
+            const name = $('#nameInputField').val();
+            const family = $('#familyInputField').val();
+            const descElement = $('#descriptionField').val();
+            $('#table tr:last')
+                .after(
+                  '<tr>'
+                + '<th scope="row">' + 4 + '</th>'
+                + '<td>' + name + '</td>'
+                + '<td>' + family + '</td>'
+                + '<td>' + descElement + '</td>'
+                + '</tr>'
+                );
         }
     </script>
 </head>
@@ -53,7 +66,7 @@
         <br>
     </div>
     <div class="container-fluid">
-        <table class="table">
+        <table class="table" id="table">
             <thead class="thead-light">
                 <tr>
                     <th scope="col">#</th>
@@ -83,6 +96,7 @@
             </tr>
             </tbody>
         </table>
+        <button type="button" class="btn btn-primary" onclick="addRow();">Добавить строку</button>
     </div>
 </body>
 </html>
