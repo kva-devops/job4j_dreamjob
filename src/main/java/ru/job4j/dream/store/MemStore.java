@@ -2,6 +2,7 @@ package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MemStore {
+public class MemStore implements Store {
     private static final MemStore INST = new MemStore();
 
     private static final AtomicInteger POST_ID = new AtomicInteger(4);
@@ -24,21 +25,6 @@ public class MemStore {
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
 
     private MemStore() {
-        posts.put(1, new Post(1,
-                "Junior Java Job",
-                "Junior position description",
-                LocalDate.parse("2021-07-22")));
-        posts.put(2, new Post(2,
-                "Middle Java Job",
-                "Middle position description",
-                LocalDate.parse("2021-07-22")));
-        posts.put(3, new Post(3,
-                "Senior Java Job",
-                "Senior position description",
-                LocalDate.parse("2021-07-22")));
-        candidates.put(1, new Candidate(1, "Junior Java"));
-        candidates.put(2, new Candidate(2, "Middle Java"));
-        candidates.put(3, new Candidate(3, "Senior Java"));
     }
 
     public static MemStore instOf() {
@@ -53,12 +39,32 @@ public class MemStore {
         return candidates.values();
     }
 
+    @Override
+    public Collection<User> findAllUsers() {
+        return null;
+    }
+
 
     public void save(Post post) {
         if (post.getId() == 0) {
             post.setId(POST_ID.incrementAndGet());
         }
         posts.put(post.getId(), post);
+    }
+
+    @Override
+    public void saveCandidate(Candidate candidate) {
+
+    }
+
+    @Override
+    public void saveUser(User user) {
+
+    }
+
+    @Override
+    public Post findById(int id) {
+        return null;
     }
 
     public void save(Candidate candidate) {
@@ -74,6 +80,31 @@ public class MemStore {
 
     public Candidate findByIdCandidate(int id) {
         return candidates.get(id);
+    }
+
+    @Override
+    public User findByIdUser(int id) {
+        return null;
+    }
+
+    @Override
+    public void deletePost(int id) {
+
+    }
+
+    @Override
+    public void deleteCandidate(int id) {
+
+    }
+
+    @Override
+    public void deleteUser(int id) {
+
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return null;
     }
 
     public void delCandidate(int id) {
