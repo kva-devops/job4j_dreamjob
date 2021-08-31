@@ -18,6 +18,9 @@ public class RegServlet extends HttpServlet {
         String password = req.getParameter("password");
         if (PsqlStore.instOf().findByEmail(email) == null) {
             PsqlStore.instOf().saveUser(new User(0, name, email, password));
+        } else {
+            req.setAttribute("error", "This email address is already registered.");
+            req.getRequestDispatcher("login.jsp").forward(req, resp);
         }
         resp.sendRedirect(req.getContextPath() + "/login.jsp");
     }
