@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <!-- Required meta tags -->
@@ -22,28 +22,46 @@
 <script>
     function sendGreeting() {
         $.ajax({
-           type: 'GET',
+           type: 'POST',
            url: 'http://localhost:8080/dreamjob/greet',
-           data: 'name=' + $('#email').val(),
-           dataType: 'text'
+           data: JSON.stringify({
+               name: $('#emailInputField').val()
+           }),
+           dataType: 'json'
         }).done(function(data) {
-            $('#emailForm').before(
-                '<p class="h2">' + $('#email').val() + '</p>'
-            );
+            $('#emailList li:last').append(`<li>${data.name}</li>`)
         }).fail(function (err) {
-            alert(err);
+            console.log(err);
         });
     }
+    $(document).ready(function () {
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/dreamjob/greet',
+            dataType: 'json'
+        }).done(function (data) {
+            for (var email of data) {
+                $('#emailList li:last').append(`<li>${email.name}</li>`)
+            }
+        }).fail(function (err) {
+            console.log(err);
+        });
+    });
 </script>
 <body>
     <div class="container">
         <form id="emailForm">
             <div class="form-group">
-                <label for="email" style="fort-weight: bold">Email address</label>
-                <input type="text" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                <label for="emailInputField" style="fort-weight: bold">Email address</label>
+                <input type="text" class="form-control" id="emailInputField" aria-describedby="emailHelp" placeholder="Enter email">
             </div>
             <button type="button" class="btn btn-primary" onclick="sendGreeting()">Submit</button>
         </form>
+        <br>
+        Почты:
+        <ul id="emailList">
+            <li></li>
+        </ul>
     </div>
 </body>
 </html>
