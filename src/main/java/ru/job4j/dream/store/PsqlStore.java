@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
@@ -79,7 +80,7 @@ public class PsqlStore implements Store {
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate ORDER BY id")) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name")));
+                    candidates.add(new Candidate(it.getInt("id"), it.getString("name"), it.getInt("city_id")));
                 }
             }
         } catch (Exception e) {
@@ -102,6 +103,22 @@ public class PsqlStore implements Store {
             LOG.error("Exception in FIND ALL USERS method", e);
         }
         return users;
+    }
+
+    @Override
+    public Collection<City> findAllCity() {
+        List<City> cities = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM city ORDER BY id")) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    cities.add(new City(it.getInt("id"), it.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception in FIND ALL CITY method", e);
+        }
+        return cities;
     }
 
     @Override
@@ -193,9 +210,10 @@ public class PsqlStore implements Store {
 
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name) VALUES(?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, city_id) VALUES(?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, candidate.getName());
+            ps.setInt(2, candidate.getCityId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -210,9 +228,10 @@ public class PsqlStore implements Store {
 
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name=? WHERE id=?")) {
+             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name=?, city_id=? WHERE id=?")) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getId());
+            ps.setInt(2, candidate.getCityId());
+            ps.setInt(3, candidate.getId());
             ps.execute();
         } catch (Exception e) {
             LOG.error("Exception in CANDIDATE UPDATE method", e);
@@ -244,7 +263,7 @@ public class PsqlStore implements Store {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    candidate = new Candidate(it.getInt("id"), it.getString("name"));
+                    candidate = new Candidate(it.getInt("id"), it.getString("name"), it.getInt("city_id"));
                 }
             }
         } catch (Exception e) {

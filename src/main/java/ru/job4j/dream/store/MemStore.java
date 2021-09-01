@@ -1,6 +1,7 @@
 package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
@@ -44,6 +45,10 @@ public class MemStore implements Store {
         return null;
     }
 
+    @Override
+    public Collection<City> findAllCity() {
+        return null;
+    }
 
     public void save(Post post) {
         if (post.getId() == 0) {

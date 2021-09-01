@@ -5,7 +5,8 @@ CREATE TABLE post (
 
 CREATE TABLE candidate (
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name TEXT,
+    city_id int REFERENCES city(id)
 );
 
 CREATE TABLE users (
@@ -14,3 +15,12 @@ CREATE TABLE users (
     email TEXT unique,
     password TEXT
 );
+
+CREATE TABLE city (
+    id SERIAL PRIMARY KEY,
+    name TEXT
+);
+
+INSERT INTO city (name) VALUES ('Москва');
+INSERT INTO city (name) VALUES ('Санкт-Петербург');
+INSERT INTO city (name) VALUES ('Владивосток');
