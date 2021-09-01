@@ -19,7 +19,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
-
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(PsqlStore.class)
 public class PostServletTest {

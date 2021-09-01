@@ -25,7 +25,7 @@ public class PostServlet extends HttpServlet {
                           HttpServletResponse resp) throws IOException, ServletException {
         req.setCharacterEncoding("UTF-8");
         PsqlStore.instOf().save(new Post(
-                Integer.valueOf(req.getParameter("id")),
+                Integer.parseInt(req.getParameter("id")),
                 req.getParameter("name")));
         resp.sendRedirect(req.getContextPath() + "/posts.do");
     }

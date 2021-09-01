@@ -1,14 +1,10 @@
 package ru.job4j.dream.store;
 
-import ru.job4j.dream.model.Candidate;
-import ru.job4j.dream.model.City;
-import ru.job4j.dream.model.Post;
-import ru.job4j.dream.model.User;
+import ru.job4j.dream.model.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.*;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,13 +13,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MemStore implements Store {
     private static final MemStore INST = new MemStore();
 
-    private static final AtomicInteger POST_ID = new AtomicInteger(4);
-
-    private static final AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
+    private static final AtomicInteger POST_ID = new AtomicInteger(0);
+    private static final AtomicInteger CANDIDATE_ID = new AtomicInteger(0);
+    private static final AtomicInteger USER_ID = new AtomicInteger(0);
 
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
 
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
+
+    private final Map<Integer, User> users = new ConcurrentHashMap<>();
+
+    private final Map<Integer, City> cities = new ConcurrentHashMap<>();
+
+    private final Map<Integer, Email> emails = new ConcurrentHashMap<>();
 
     private MemStore() {
     }
@@ -42,12 +44,12 @@ public class MemStore implements Store {
 
     @Override
     public Collection<User> findAllUsers() {
-        return null;
+        return users.values();
     }
 
     @Override
     public Collection<City> findAllCity() {
-        return null;
+        return cities.values();
     }
 
     public void save(Post post) {
@@ -59,17 +61,23 @@ public class MemStore implements Store {
 
     @Override
     public void saveCandidate(Candidate candidate) {
-
+        if (candidate.getId() == 0) {
+            candidate.setId(CANDIDATE_ID.incrementAndGet());
+        }
+        candidates.put(candidate.getId(), candidate);
     }
 
     @Override
     public void saveUser(User user) {
-
+        if (user.getId() == 0) {
+            user.setId(USER_ID.incrementAndGet());
+        }
+        users.put(user.getId(), user);
     }
 
     @Override
     public Post findById(int id) {
-        return null;
+        return posts.get(id);
     }
 
     public void save(Candidate candidate) {
@@ -89,27 +97,37 @@ public class MemStore implements Store {
 
     @Override
     public User findByIdUser(int id) {
-        return null;
+        return users.get(id);
     }
 
     @Override
     public void deletePost(int id) {
-
+        Post post = findByIdPost(id);
+        posts.remove(post);
     }
 
     @Override
     public void deleteCandidate(int id) {
-
+        Candidate candidate = findByIdCandidate(id);
+        candidates.remove(candidate);
     }
 
     @Override
     public void deleteUser(int id) {
-
+        User user = findByIdUser(id);
+        users.remove(user);
     }
 
     @Override
     public User findByEmail(String email) {
-        return null;
+        User result = null;
+        for (Map.Entry user : users.entrySet()) {
+            User buff = (User) user.getValue();
+            if (buff.getEmail().equals(email)) {
+                result = buff;
+            }
+        }
+        return result;
     }
 
     public void delCandidate(int id) {
