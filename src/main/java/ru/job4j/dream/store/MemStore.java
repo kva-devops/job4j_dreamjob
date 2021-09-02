@@ -52,6 +52,16 @@ public class MemStore implements Store {
         return cities.values();
     }
 
+    @Override
+    public Collection<Post> findLastPosts() {
+        return posts.values();
+    }
+
+    @Override
+    public Collection<Candidate> findLastCandidates() {
+        return candidates.values();
+    }
+
     public void save(Post post) {
         if (post.getId() == 0) {
             post.setId(POST_ID.incrementAndGet());

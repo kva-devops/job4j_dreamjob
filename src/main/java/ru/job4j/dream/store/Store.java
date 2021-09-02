@@ -16,6 +16,10 @@ public interface Store {
 
     Collection<City> findAllCity();
 
+    Collection<Post> findLastPosts();
+
+    Collection<Candidate> findLastCandidates();
+
     void save(Post post);
 
     void saveCandidate(Candidate candidate);

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class PostServlet extends HttpServlet {
@@ -15,6 +17,7 @@ public class PostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req,
                          HttpServletResponse resp) throws IOException, ServletException {
+        req.setAttribute("last", new ArrayList<>(PsqlStore.instOf().findLastPosts()));
         req.setAttribute("posts", new ArrayList<>(PsqlStore.instOf().findAllPosts()));
         req.setAttribute("user", req.getSession().getAttribute("user"));
         req.getRequestDispatcher("posts.jsp").forward(req, resp);
@@ -22,11 +25,12 @@ public class PostServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req,
-                          HttpServletResponse resp) throws IOException, ServletException {
+                          HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
         PsqlStore.instOf().save(new Post(
                 Integer.parseInt(req.getParameter("id")),
-                req.getParameter("name")));
+                req.getParameter("name"),
+                Timestamp.valueOf(LocalDateTime.now())));
         resp.sendRedirect(req.getContextPath() + "/posts.do");
     }
 }

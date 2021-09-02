@@ -1,11 +1,20 @@
 package ru.job4j.dream.model;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
 public class Candidate {
     private int id;
     private String name;
+    private Timestamp created;
     private int cityId;
+
+    public Candidate(int id, String name, Timestamp created, int cityId) {
+        this.id = id;
+        this.name = name;
+        this.created = created;
+        this.cityId = cityId;
+    }
 
     public Candidate(int id, String name, int cityId) {
         this.id = id;
@@ -27,6 +36,14 @@ public class Candidate {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Timestamp getCreated() {
+        return created;
+    }
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
     }
 
     public int getCityId() {

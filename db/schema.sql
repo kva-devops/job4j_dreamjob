@@ -1,11 +1,13 @@
 CREATE TABLE post (
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name TEXT,
+    add_time TIMESTAMP
 );
 
 CREATE TABLE candidate (
     id SERIAL PRIMARY KEY,
     name TEXT,
+    add_time TIMESTAMP,
     city_id int REFERENCES city(id)
 );
 

@@ -122,6 +122,38 @@ public class PsqlStore implements Store {
     }
 
     @Override
+    public Collection<Post> findLastPosts() {
+        List<Post> lastPosts = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post WHERE add_time BETWEEN CURRENT_TIMESTAMP - INTERVAL '1 DAY' AND CURRENT_TIMESTAMP ORDER BY id")) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    lastPosts.add(new Post(it.getInt("id"), it.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception in FIND LAST POSTS method", e);
+        }
+        return lastPosts;
+    }
+
+    @Override
+    public Collection<Candidate> findLastCandidates() {
+        List<Candidate> lastCandidates = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate WHERE add_time BETWEEN CURRENT_TIMESTAMP - INTERVAL '1 DAY' AND CURRENT_TIMESTAMP ORDER BY id")) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    lastCandidates.add(new Candidate(it.getInt("id"), it.getString("name"), it.getInt("city_id")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception in FIND LAST CANDIDATES method", e);
+        }
+        return lastCandidates;
+    }
+
+    @Override
     public void save(Post post) {
         if (post.getId() == 0) {
             create(post);
@@ -182,9 +214,10 @@ public class PsqlStore implements Store {
 
     private Post create(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name) VALUES (?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name, add_time) VALUES (?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, post.getName());
+            ps.setTimestamp(2, post.getCreated());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -210,10 +243,11 @@ public class PsqlStore implements Store {
 
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, city_id) VALUES(?, ?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, add_time, city_id) VALUES(?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getCityId());
+            ps.setTimestamp(2, candidate.getCreated());
+            ps.setInt(3, candidate.getCityId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
