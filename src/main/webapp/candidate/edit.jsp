@@ -35,20 +35,20 @@
         }
     </script>
     <script>
-        function fillCityList() {
+        $(document).ready(function () {
             $.ajax({
-                type: 'GET',
-                url: 'http://localhost:8080/dreamjob/candidate/edit.jsp',
-                data: <!--sql request to database--> ,
-                dataType: 'text'
-            }).done(function (data) {
-                for (var city of data) {
-                    $('#cityChoice option:last').append(`<option>${city.name}</option>`)
+                type: "GET",
+                url: "http://localhost:8080/dreamjob/editCandidate.do",
+                dataType: "json",
+                success: function (data) {
+                    let cities = "";
+                    for (let i = 0; i < data.length; i++) {
+                        cities += "<option value=" + data[i]['id'] + ">" + data[i]['name'] +  "</option>";
+                    }
+                    $('#cityChoice').html(cities);
                 }
-            }).fail(function (err) {
-                console.log(err);
             })
-        }
+        })
     </script>
 </head>
 <body>
@@ -73,7 +73,7 @@
                 <a class="nav-link" href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
+                <a class="nav-link" href="<%=request.getContextPath()%>/editCandidate.do">Добавить кандидата</a>
             </li>
             <c:if test="${user == null}">
                 <li class="nav-item">

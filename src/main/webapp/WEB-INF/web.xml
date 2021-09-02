@@ -62,6 +62,10 @@
     <servlet-name>GreetingServlet</servlet-name>
     <servlet-class>ru.job4j.dream.servlet.GreetingServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>EditCandidatePageServlet</servlet-name>
+    <servlet-class>ru.job4j.dream.servlet.EditCandidatePageServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>PostServlet</servlet-name>
@@ -110,6 +114,10 @@
   <servlet-mapping>
     <servlet-name>GreetingServlet</servlet-name>
     <url-pattern>/greet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>EditCandidatePageServlet</servlet-name>
+    <url-pattern>/editCandidate.do</url-pattern>
   </servlet-mapping>
 
 </web-app>
