@@ -1,4 +1,4 @@
-# job4j_dreamjob
+# Dream Job Application
 
 ## About project.
 This web application is a labor barge. The main purpose of this application is to publish vacancies and resumes of applicants.
@@ -15,5 +15,16 @@ Also in the application there is an opportunity to add new vacancies and add new
 Candidates have the opportunity to upload their photo.
 ![AddPosts](/images/5.png)
 ![AddCandidates](/images/6.png)
+
+## Configuration
+Maven. 
+
+## Usage
+Log in or register in the system. Add vacancies or upload a resume.
+
+## Contact
+Vladimir Kutiavin 
+skype: tribuna87
+email: tribuna87@mail.ru
 
 
