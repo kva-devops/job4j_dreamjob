@@ -23,8 +23,10 @@ Maven.
 Log in or register in the system. Add vacancies or upload a resume.
 
 ## Contact
-Vladimir Kutiavin 
+Vladimir Kutiavin
+
 skype: tribuna87
+
 email: tribuna87@mail.ru
 
 
