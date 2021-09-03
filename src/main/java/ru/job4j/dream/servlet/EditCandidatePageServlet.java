@@ -15,13 +15,12 @@ import java.util.Collection;
 
 public class EditCandidatePageServlet extends HttpServlet {
 
-    private final Collection<City> list = PsqlStore.instOf().findAllCity();
-
     private static final Gson GSON = new GsonBuilder().create();
 
     @Override
     public void doGet(HttpServletRequest req,
                       HttpServletResponse resp) throws IOException {
+        Collection<City> list = PsqlStore.instOf().findAllCity();
         resp.setContentType("application/json; charset=utf-8");
         OutputStream output = resp.getOutputStream();
         String json = GSON.toJson(list);
