@@ -32,7 +32,7 @@ public class CandidateServletTest {
         HttpServletResponse resp = mock(HttpServletResponse.class);
         PowerMockito.when(req.getParameter("id")).thenReturn("0");
         PowerMockito.when(req.getParameter("name")).thenReturn("n");
-        PowerMockito.when(req.getParameter("cityId")).thenReturn("1");
+        PowerMockito.when(req.getParameter("city")).thenReturn("1");
         new CandidateServlet().doPost(req, resp);
         Candidate candidate = store.findAllCandidates().iterator().next();
         assertThat(candidate.getName(), is("n"));
