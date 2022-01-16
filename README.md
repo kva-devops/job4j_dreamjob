@@ -1,32 +1,46 @@
-# Dream Job Application
+# Приложение Dream Job
 
-## About project.
-This web application is a labor barge. The main purpose of this application is to publish vacancies and resumes of applicants.
-To start using the app, you need to log in or register.
-![Login](/images/1.png)
-![Register](/images/2.png)
+## О проекте
+#### Описание
+Web-Приложение для поиска работы. Позволяет размещать вакансии и резюме соискателей.
+Предусмотрена регистрация пользователей. Кандидаты при размещении резюме могут загружать свои фотографии.
+ 
+#### Технологии
+>JDK14, Maven, Servlet, PostgreSQL, JSTL, JS, AJAX, Mockito
+## Сборка
+0. Скачайте исходники 
+1. Создайте базу данных в соответствии с настройками, указанными в файле *db.properties*. 
+   Файл находиться в корневой директории.
+2. Выполните сборку проекта: `mvn install`
+3. Скопируйте полученный файл *target/mvn-webapp-test.war* на свой сервер
 
-The main screens of the application are vacancies and candidates. 
-The top part shows the latest entries that were added during the last day.
-![Posts](/images/3.png)
-![Candidates](/images/4.png)
+## Как пользоваться
+Чтобы начать работать с приложением необходимо авторизоваться или зарегистрироваться:
 
-Also in the application there is an opportunity to add new vacancies and add new resumes of candidates.
-Candidates have the opportunity to upload their photo.
-![AddPosts](/images/5.png)
-![AddCandidates](/images/6.png)
+![Login](images/1.png)
 
-## Configuration
-Maven. 
+![Register](images/2.png)
 
-## Usage
-Log in or register in the system. Add vacancies or upload a resume.
+После авторизации пользователь попадает на главную страницу, на которой располагается подборка свежих вакансий:
 
-## Contact
-Vladimir Kutiavin
+![Posts](images/3.png)
+
+Навигация по приложению реализована через верхнее меню.
+Посмотреть кандидатов, а также добавить резюме или разместить вакансию можно через соответствующий пункт меню:
+
+![Candidates](images/4.png)
+
+![AddPosts](images/5.png)
+
+![AddCandidates](images/6.png)
+
+## Контакты
+Кутявин Владимир
 
 skype: tribuna87
 
 email: tribuna87@mail.ru
+
+telegram: @kutiavinvladimir
 
 
