@@ -1,4 +1,5 @@
 # Приложение Dream Job
+[![Build Status](https://app.travis-ci.com/kva-devops/job4j_dreamjob.svg?branch=master)](https://app.travis-ci.com/kva-devops/job4j_dreamjob)
 
 ## О проекте
 #### Описание
